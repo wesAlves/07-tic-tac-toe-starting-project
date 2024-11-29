@@ -19,11 +19,11 @@ function deriveActivePlayer(gameTurns) {
 }
 
 function App() {
-    const [gameTurns, setGameTurns] = useState([])
+    const [gameTurns, setGameTurns] = useState([]) // this is the single source of true
 
     const activePlayer = deriveActivePlayer(gameTurns);
 
-    let gameBoard = initialGameBoard;
+    let gameBoard = [...initialGameBoard.map(array => [...array])]; // we need this to avoid edit in memory and make a brand-new array that will always be a deep copy of the old array
 
     for (const turn of gameTurns) {
         const {square, player} = turn;
@@ -46,6 +46,10 @@ function App() {
 
     }
 
+    function handleRestart(){
+        setGameTurns([])
+    }
+
     const hasDraw = gameTurns.length === 9 && !winner
 
     function handleSelectSquare(rowIndex, colIndex) {
@@ -63,7 +67,7 @@ function App() {
                 <Player name="Player 1" symbol="X" isActive={activePlayer === "X"}/>
                 <Player name="Player 2" symbol="O" isActive={activePlayer === "O"}/>
             </ol>
-            {(winner || hasDraw) && <GameOver winner={winner} />}
+            {(winner || hasDraw) && <GameOver winner={winner} onRestart={handleRestart}/>}
             <GameBoard onSelectSquare={handleSelectSquare} activePlayerSymbol={activePlayer} board={gameBoard}/>
         </div>
         <Log turns={gameTurns}/>
