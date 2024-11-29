@@ -3,7 +3,7 @@ export default function Log({turns}) {
     return <ol id="log">
         {turns.map(({square:{row, col},player}) => {
             return(
-                <li>Player: {player}, Square: {row}, {col}</li>
+                <li key={`${row}${col}`}>{player} selected: {row}, {col}</li>
             )
         })}
     </ol>
